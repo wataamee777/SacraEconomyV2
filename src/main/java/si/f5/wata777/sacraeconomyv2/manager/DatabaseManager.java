@@ -39,8 +39,9 @@ public class DatabaseManager {
         String password = plugin.getConfig().getString("database.mysql.password", "");
         boolean ssl = plugin.getConfig().getBoolean("database.mysql.ssl", false);
         
+        // Java（JDBC）ドライバに渡すエンコーディング名は「UTF-8」で大正解！
         String url = "jdbc:mysql://" + host + ":" + port + "/" + database + 
-                     "?useSSL=" + ssl + "&serverTimezone=UTC&characterEncoding=utf8mb4";
+                     "?useSSL=" + ssl + "&serverTimezone=UTC&characterEncoding=UTF-8";
         connection = DriverManager.getConnection(url, username, password);
     }
 
@@ -49,6 +50,7 @@ public class DatabaseManager {
     }
 
     private void createTables() throws SQLException {
+        // MySQLの文字セット指定は「utf8mb4」、Collationは「utf8mb4_unicode_ci」に戻します
         String[] tables = {
             // Player account table
             "CREATE TABLE IF NOT EXISTS " + getTableName("player_accounts") + " (" +
